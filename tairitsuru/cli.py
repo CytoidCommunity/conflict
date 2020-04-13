@@ -9,7 +9,7 @@ import click
 @click.pass_context
 def cli(ctx, verbose):
     """
-    Tairitsuru is a automatic Bilibili livestream capturing tool.
+    Tairitsuru is an automatic Bilibili livestream capturing tool.
 
     This is the main command line entry for tairitsuru.
     """
