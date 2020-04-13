@@ -25,6 +25,6 @@ async def upload(endpoint, file, bucket, access_key, access_secure, addr_style):
                 await bucket.upload_fileobj(f)
     except Exception as e:
         logging.error("An error occurred while uploading: " + str(e))
-        sys.exit()
+        sys.exit(1)
     else:
         logging.info("Success!")
