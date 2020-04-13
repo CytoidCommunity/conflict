@@ -11,7 +11,7 @@ def cli(ctx, verbose):
     """
     Tairitsuru is an automatic Bilibili livestream capturing tool.
 
-    This is the main command line entry for tairitsuru.
+    This is the main command line entry of tairitsuru.
     """
     if verbose == True:
         logging.info("You are now in verbose mode.")
@@ -36,7 +36,9 @@ def cli(ctx, verbose):
               help="The addressing style of the object storage.")
 def upload(filename, endpoint, bucket, access_key, access_secure, addr_style):
     """
-    The file upload helper. Upload the file provided to a S3-compatible object storage.
+    The file upload helper.
+    
+    Upload the file provided to a S3-compatible object storage.
     """
     from .utils.upload import upload
     asyncio.run(upload(endpoint, filename, bucket,
