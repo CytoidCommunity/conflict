@@ -23,8 +23,8 @@ async def upload(endpoint, file, bucket, access_key, access_secure, addr_style):
             bucket = await s3.Bucket(bucket)
             with open(file, mode="rb") as f:
                 await bucket.upload_fileobj(f)
-    except Exception as e:
-        logging.error("An error occurred while uploading: " + str(e))
+    except Exception:
+        logging.exception("An error occurred while uploading:")
         sys.exit(1)
     else:
         logging.info("Success!")
