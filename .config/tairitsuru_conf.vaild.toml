@@ -1,4 +1,4 @@
-# This is the vaild configuration example of Tairitsuru.
+# This is a vaild configuration example of Tairitsuru.
 # EDIT BEFORE USE! See `tairitsuru_conf.example.toml`.
 
 [common]
@@ -39,7 +39,7 @@ pushmsg_newvideo = """
 Your favorite uploader {uploader} uploaded a new video at {datetime}! \n\
 Title: {title} \n\
 Description: \n\
-{description}\n\
+{description} \n\
 Go to {link_bvid} and watch now!
 """
 
