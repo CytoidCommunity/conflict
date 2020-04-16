@@ -1,11 +1,6 @@
 # This is a vaild configuration example of Tairitsuru.
 # EDIT BEFORE USE! See `tairitsuru_conf.example.toml`.
 
-[common]
-verbose = false
-interval = 60 
-
-
 [transcoding]
 enable = false
 formart = "mp4"
@@ -60,7 +55,10 @@ users = ["123456789", "987654321"]
 uploader = "Tix"
 uid = 3234445
 roomid = 22114797
+interval = 60
 
-notify.video = true
-notify.live = true
-record_live = true
+video.notify = true
+live.notify = true
+live.record = true
+
+# Add more below! And delete this line if you want :)

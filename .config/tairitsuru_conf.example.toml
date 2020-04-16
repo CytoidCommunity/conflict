@@ -8,16 +8,6 @@
 
 ## START EXAMPLE
 
-
-# common: The common settings.
-[common]
-# Verbose. Well I like being quiet, but you can enable it.
-verbose = false
-
-# Set the interval between two checks for new events. (Default: 60 seconds)
-# Don't set it to less than 60s, or you may be banned by Bilibili.
-interval = 60 
-
 # transcoding: I've heard that you love mp4.
 [transcoding]
 # By default, the livestream is ".flv" file.
@@ -129,29 +119,32 @@ enable = false
 # Optionally, give him a nickname.
 uploader = "Tix"
 
+# Set the interval between two checks for new events. (Default: 60 seconds)
+# Don't set it to less than 60s, or you may be banned by Bilibili.
+interval = 60 
+
 # You MUST set a uid.
 uid = 3234445
 # Enable notifing for his new video.
-notify.video = true
+video.notify = true
 
 # Livestream Related Part
 # If you want to use live related features, you should set a roomid.
 roomid = 22114797
 # Enable notifing for his livestream.
-notify.live = true
+live.notify = true
 
 # Do not miss any livestream! Let's record it.
-record_live = true
+live.record = true
 
 
 # Add more watchers!
 #[[watchers]]
 #uid = 123456
 #roomid = 654321
-#notify.live = true
-#record_live = false
+#live.notify = true
+#live.record = false
 
 #...
-
 
 ## END EXAMPLE
