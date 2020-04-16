@@ -59,8 +59,8 @@ users = ["123456789", "987654321"]
 [[watchers]]
 uploader = "Tix"
 uid = 3234445
-notify.video = true
-
 roomid = 22114797
+
+notify.video = true
 notify.live = true
 record_live = true
