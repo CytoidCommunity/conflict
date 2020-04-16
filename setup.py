@@ -6,7 +6,7 @@ with open("README.md", "r") as fh:
 setuptools.setup(
     name="tairitsuru",
     version="0.1.0",
-    description="The automatic Bilibili livestream capturing tool.",
+    description="The automatic Bilibili watcher.",
     long_description=long_description,
     long_description_content_type="text/markdown",
     keywords="live bilibili",

@@ -11,7 +11,7 @@ import click
 @click.pass_context
 def cli(ctx, verbose):
     """
-    Tairitsuru is an automatic Bilibili livestream capturing tool.
+    Tairitsuru is an automatic Bilibili watcher.
 
     This is the main command line entry of tairitsuru.
     """
