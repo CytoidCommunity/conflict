@@ -12,8 +12,8 @@ setuptools.setup(
     keywords="live bilibili",
     url="https://github.com/CytoidCommunity/tairitsuru",
     entry_points={
-        'console_scripts': [
-            'tairitsuru=tairitsuru.cli:cli',
+        "console_scripts": [
+            "tairitsuru=tairitsuru.cli:cli",
         ],
     },
     packages=setuptools.find_packages(),
@@ -32,5 +32,5 @@ setuptools.setup(
         "click",
         "aioboto3"
     ],
-    python_requires='>=3.7',
+    python_requires=">=3.7",
 )
