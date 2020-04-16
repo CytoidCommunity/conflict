@@ -1,0 +1,157 @@
+# This is the configuration example of Tairitsuru.
+# It contains the detailed explaintion. If you feel it's too complex, 
+# have a look at `tairitsuru_conf.vaild.toml`.
+
+# Tairitsuru uses TOML (Tom's Obvious, Minimal Language) as its configuration
+# language. See <https://github.com/toml-lang/toml> for its specification.
+
+
+## START EXAMPLE
+
+
+# common: The common settings.
+[common]
+# Verbose. Well I like being quiet, but you can enable it.
+verbose = false
+
+# Set the interval between two checks for new events. (Default: 60 seconds)
+# Don't set it to less than 60s, or you may be banned by Bilibili.
+interval = 60 
+
+# transcoding: I've heard that you love mp4.
+[transcoding]
+# By default, the livestream is ".flv" file.
+# You can choose to transcode it to other formarts without changing
+# its encoder using ffmpeg. Relax - It's really fast!
+enable = false
+#formart = "mp4" # You may want to use "mkv" instead. 
+
+
+# stroage: Where is my data?
+[storage]
+# Available type: local, s3 (Object Storage)
+type = "local"
+
+[storage.local]
+path = "./data" 
+
+#[storage.s3]
+#cache = /tmp  # Set it to another place if you use tmpfs!
+#
+# I don't think I need to explain the following things if you use Object
+# Storage.
+#
+#endpoint = "https://example.someservice.com/"
+#bucket = "tairitsuru"
+#access_key = "************"
+#access_secret = "************"
+#addressing_style = "auto" # If you don't know, just leave it "auto".
+
+
+# proxy: The usage of proxies.
+# Bilibili's API bans the requests from most cloud computing platforms.
+# We may bypass this restriction by using a proxy.
+[proxy]
+enable = false
+
+# Available types: http, socks5
+#type = "none"
+
+# Only use proxy for Bilibili API requests and do not use it for streaming or
+# pushing.
+#bili_api_only = true 
+
+# proxy.http: HTTP proxy configuration.
+#[proxy.http]
+#addr = "127.0.0.1"
+#port = 8118
+
+# proxy.socks5: Socks5 proxy configuration.
+#[proxy.socks5]
+#addr = "127.0.0.1"
+#port = 8118
+
+
+# push: Message pushing.
+[push]
+enable = false
+
+# Available types: cqhttp, mirai, telegram
+# QQ HOO!K Support might be added later.
+# SHOULD BE AN ARRAY.
+#type = ["mirai", "telegram"]
+
+# Push Message
+#
+# Remember the following points:
+# - The following components can be used anywhere:
+#   {uid}, {uploader}, {datetime}, {time}
+# - The following components can be used in `pushmsg_livestart`:
+#   {roomid}, {live_title}, {live_url}
+# - The following components can be used in `pushmsg_liveend`:
+#   {live_id}, {live_title}, {live_duration}
+# - The following components can be used in `pushmsg_newvideo`:
+#   {title}, {description}, {aid}, {bvid}, {link_aid}, {link_bvid}
+# - As a reminder, If you use normal strings (which uses `"` but not `'`)
+#   to write the message, be careful with `\`.
+#
+#pushmsg_livestart = """Your favorite uploader {uploader} starts livestreaming! \
+#                       Go to {live_url} and watch now!"""
+#pushmsg_liveend = """The uploader {uploader} has ended his livestream. \
+#                     He/She has livestreamed for {live_duration}."""
+#pushmsg_newvideo = """
+#Your favorite uploader {uploader} uploaded a new video at {datetime}! \n\
+#Title: {title} \n\
+#Description: \n\
+#{description}\n\
+#Go to {link_bvid} and watch now!
+#"""
+
+# push.mirai: Mirai HTTP API (https://github.com/mamoe/mirai-api-http)
+#[push.mirai]
+#addr = "127.0.0.1"
+#port = 8080
+#auth = "************" # authKey in Mirai's configruation
+#users = ["123456789", "987654321"]
+#groups = ["123456789", "987654321"]
+
+# push.telegram: Telegram API
+#[push.telegram]
+#addr = "https://api.telegram.org/"
+#auth = "************" # token in Telegram's @BotFather
+#users = ["123456789", "987654321"]
+
+
+# --- Now comes the most important part! ---
+# uploaders: Who do you want to watch?
+# Let's take Tix_Official (uid: 3234445, roomid: 22114797) for example.
+[[watchers]]
+# Optionally, give him a nickname.
+uploader = "Tix"
+
+# You MUST set a uid.
+uid = 3234445
+# Enable notifing for his new video.
+notify.video = true
+
+# Livestream Related Part
+# If you want to use live related features, you should set a roomid.
+roomid = 22114797
+# Enable notifing for his livestream.
+notify.live = true
+
+# Do not miss any livestream! Let's record it.
+record_live = true
+
+
+# Add more watchers!
+#[[watchers]]
+#uid = 123456
+#roomid = 654321
+#notify.live = true
+#record_live = false
+
+#...
+
+
+## END EXAMPLE

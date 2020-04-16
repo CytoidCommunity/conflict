@@ -1,0 +1,66 @@
+# This is the vaild configuration example of Tairitsuru.
+# EDIT BEFORE USE! See `tairitsuru_conf.example.toml`.
+
+[common]
+verbose = false
+interval = 60 
+
+
+[transcoding]
+enable = false
+formart = "mp4"
+
+
+[storage]
+type = "local"
+
+[storage.local]
+path = "./data" 
+
+
+[proxy]
+enable = true
+type = "http"
+bili_api_only = true 
+
+[proxy.http]
+addr = "127.0.0.1"
+port = 8118
+
+
+[push]
+enable = true
+type = ["mirai", "telegram"]
+pushmsg_livestart = """Your favorite uploader {uploader} starts livestreaming! \
+                       Go to {live_url} and watch now!"""
+pushmsg_liveend = """The uploader {uploader} has ended his livestream. \
+                     He/She has livestreamed for {live_duration}."""
+pushmsg_newvideo = """
+Your favorite uploader {uploader} uploaded a new video at {datetime}! \n\
+Title: {title} \n\
+Description: \n\
+{description}\n\
+Go to {link_bvid} and watch now!
+"""
+
+[push.mirai]
+addr = "127.0.0.1"
+port = 8080
+auth = "************" # authKey in Mirai's configruation
+users = ["123456789", "987654321"]
+groups = ["123456789", "987654321"]
+
+[push.telegram]
+addr = "https://api.telegram.org/"
+auth = "************" # token in Telegram's @BotFather
+users = ["123456789", "987654321"]
+
+
+[[watchers]]
+uploader = "Tix"
+uid = 3234445
+notify.video = true
+
+roomid = 22114797
+notify.live = true
+record_live = true
