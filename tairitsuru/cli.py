@@ -6,13 +6,8 @@ import sys
 
 import click
 
-from .misc import ComplexCLI, pass_environment, verbosity_option
-
-
-@click.command(cls=ComplexCLI)
+@click.group()
 @click.version_option()
-@pass_environment
-@verbosity_option
 def cli(ctx):
     """
     Tairitsuru is an automatic Bilibili watcher.
