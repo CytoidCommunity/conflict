@@ -46,13 +46,13 @@ Go to {link_bvid} and watch now!
 [push.mirai]
 addr = "127.0.0.1"
 port = 8080
-auth = "************" # authKey in Mirai's configruation
+auth = "************"
 users = ["123456789", "987654321"]
 groups = ["123456789", "987654321"]
 
 [push.telegram]
 addr = "https://api.telegram.org/"
-auth = "************" # token in Telegram's @BotFather
+auth = "************"
 users = ["123456789", "987654321"]
 
 
