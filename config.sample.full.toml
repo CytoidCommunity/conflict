@@ -41,109 +41,123 @@ path = "./data"
 # proxy: The usage of proxies.
 # Bilibili's API bans the requests from most cloud computing platforms.
 # We may bypass this restriction by using a proxy.
-[proxy]
-enable = false
+#[proxy]
 
-# Available types: http, socks5
-#type = "none"
+# Available scheme: http, https (socks5 not supported yet)
+#url = "http://localhost:1081/"
 
 # Only use proxy for Bilibili API requests and do not use it for streaming or
 # pushing.
-#bili_api_only = true 
-
-# proxy.http: HTTP proxy configuration.
-#[proxy.http]
-#addr = "127.0.0.1"
-#port = 8118
-
-# proxy.socks5: Socks5 proxy configuration.
-#[proxy.socks5]
-#addr = "127.0.0.1"
-#port = 8118
+#bili_api_only = true
 
 
 # push: Message pushing.
 [push]
-enable = false
 
-# Available types: cqhttp, mirai, telegram
-# QQ HOO!K Support might be added later.
-# SHOULD BE AN ARRAY.
-#type = ["mirai", "telegram"]
-
+[push.message]
 # Push Message
 #
+# This is the default template for message pushing.
+# You can override it in [[push.templates]]
+#
 # Remember the following points:
-# - The following components can be used anywhere:
-#   {uid}, {uploader}, {datetime}, {time}
-# - The following components can be used in `pushmsg_livestart`:
-#   {roomid}, {live_title}, {live_url}
-# - The following components can be used in `pushmsg_liveend`:
-#   {live_id}, {live_title}, {live_duration}
-# - The following components can be used in `pushmsg_newvideo`:
-#   {title}, {description}, {aid}, {bvid}, {link_aid}, {link_bvid}
+# - You can use data returned by bilibili api.
+#   {room[...]...} stand for result of `get_room_info`,
+#   {user[...]...} stand for result of `get_user_info`.
+#   e.g. {room[user_cover]} will be replaced by cover image url.
+#        {user[info][uname]} will be replaced by user name.
+# - Of course some common components are pre-defined.
+#   Here are them:
+#  * The following components are available in both `livestart` and `liveend`
+#    {uid}: alias for {room[uid]} and/or {user[info][uid]}
+#    {room_id}: alias for {room[room_id]}
+#    {live_title}: alias for {room[title]}
+#    {cover}: alias for {room[user_cover]}
+#    {background}: alias for {room[background]}
+#    {user_name}: alias for {user[info][uname]}
+#                 (will be replaced by `nickname` if set)
+#    {user_face}: alias for {user[info][face]}
+#    {san}: alias for {user[san]}
+#  * The following components are available in `liveend`:
+#    {duration}
 # - As a reminder, If you use normal strings (which uses `"` but not `'`)
 #   to write the message, be careful with `\`.
 #
-#pushmsg_livestart = """Your favorite uploader {uploader} starts livestreaming! \
-#                       Go to {live_url} and watch now!"""
-#pushmsg_liveend = """The uploader {uploader} has ended his livestream. \
-#                     He/She has livestreamed for {live_duration}."""
-#pushmsg_newvideo = """
-#Your favorite uploader {uploader} uploaded a new video at {datetime}! \n\
-#Title: {title} \n\
-#Description: \n\
-#{description}\n\
-#Go to {link_bvid} and watch now!
-#"""
+livestart = """
+🌟tairitsuru: {user_name} 开始直播 {live_title}啦, \
+快去让TA发光吧! 直播间地址: https://live.bilibili.com/{room_id}
+"""
+liveend = "🌟tairitsuru: {uploader} 直播结束, 总时长 {live_duration}."
+# TODO: notifing for new video
 
-# push.mirai: Mirai API HTTP (https://github.com/mamoe/mirai-api-http)
-#[push.mirai]
-#addr = "127.0.0.1"
-#port = 8080
-#auth = "************" # authKey in Mirai API HTTP's configruation
-#users = ["123456789", "987654321"]
-#groups = ["123456789", "987654321"]
+[[push.templates]]
+# An unique identifier. It will be used later.
+id = "mirai"
 
-# push.telegram: Telegram API
-#[push.telegram]
-#addr = "https://api.telegram.org/"
-#auth = "************" # token in Telegram's @BotFather
-#users = ["123456789", "987654321"]
+# Available types: cqhttp, mirai, telegram
+# QQ HOO!K Support might be added later.
+type = "mirai" # Mirai API HTTP (https://github.com/mamoe/mirai-api-http)
+apiroot = "http://127.0.0.1:8080/"
+auth = "************" # authKey in Mirai API HTTP's configruation
+users = ["123456789", "987654321"]
+groups = ["123456789", "987654321"]
+
+# Message template overriding.
+# In this example, we use Mirai API HTTP's message chain
+
+livestart = [
+    { type = "Image", url = "{cover}" },
+    { type = "Plain", text = "🌟tairitsuru: {user_name} 开始直播 {live_title}啦, 快去让TA发光吧! 直播间地址: https://live.bilibili.com/{room_id}" }
+]
+
+[[push.templates]]
+id = "tg"
+
+# Telegram API
+type = "telegram"
+addr = "https://api.telegram.org/"
+auth = "************" # token in Telegram's @BotFather
+users = ["123456789", "987654321"]
 
 
 # --- Now comes the most important part! ---
-# uploaders: Who do you want to watch?
-# Let's take Tix_Official (uid: 3234445, roomid: 22114797) for example.
+# watchers: Who do you want to watch?
+# Let's take Tira_Official (uid: 3234445, roomid: 22114797) for example.
 [[watchers]]
 # Optionally, give him a nickname.
-uploader = "Tix"
+nickname = "Tix"
 
 # Set the interval between two checks for new events. (Default: 60 seconds)
 # Don't set it to less than 60s, or you may be banned by Bilibili.
-interval = 60 
+interval = 60
 
+# Use notification template.
+push = ["mirai", "tg"]
+
+[watchers.video]
 # You MUST set a uid.
 uid = 3234445
 # Enable notifing for his new video.
-video.notify = true
+notify = true
 
 # Livestream Related Part
+[watchers.live]
 # If you want to use live related features, you should set a roomid.
 roomid = 22114797
 # Enable notifing for his livestream.
-live.notify = true
-
+notify = true
 # Do not miss any livestream! Let's record it.
-live.record = true
+record = true
 
 
 # Add more watchers!
 #[[watchers]]
+#[watchers.video]
 #uid = 123456
+#[watchers.live]
 #roomid = 654321
-#live.notify = true
-#live.record = false
+#notify = true
+#record = false
 
 #...
 
