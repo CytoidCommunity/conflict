@@ -9,6 +9,7 @@ from typing import Optional
 import aiofiles
 
 from tairitsuru.logger import Logger
+from tairitsuru.misc import auto_retry
 
 from .api import get_play_urls, get_room_info, get_user_info
 from .capture import capture
@@ -28,6 +29,10 @@ class Worker:
         self.callback_start = []
         self.callback_end = []
 
+        self.get_play_urls = auto_retry(logger=self.logger)(get_play_urls)
+        self.get_room_info = auto_retry(logger=self.logger)(get_room_info)
+        self.get_user_info = auto_retry(logger=self.logger)(get_user_info)
+
     def on_start(self, func):
         self.callback_start.append(func)
 
@@ -40,8 +45,8 @@ class Worker:
 
     async def run(self):
         while True:
-            room = await get_room_info(self.room_id)
-            user = await get_user_info(self.room_id)
+            room = await self.get_room_info(self.room_id)
+            user = await self.get_user_info(self.room_id)
             if not room["live_status"] == 1:
                 self.logger.info("⭐️  %s 不在直播 %d", user["info"]["uname"],
                                  room["live_status"])
@@ -60,7 +65,7 @@ class Worker:
                     filename = "%s-%s.flv" % (
                         user["info"]["uname"],
                         time.strftime("%Y-%m-%d_%H%M%S", time.localtime()))
-                    url_info = await get_play_urls(self.room_id)
+                    url_info = await self.get_play_urls(self.room_id)
                     if len(url_info["durl"]) == 0:
                         self.logger.error("❌  Stream list is empty.")
                     else:
@@ -79,7 +84,7 @@ class Worker:
                             "https://live.bilibili.com/%d" % self.room_id)
                 else:
                     await asyncio.sleep(self.check_interval)
-                room = await get_room_info(self.room_id)
+                room = await self.get_room_info(self.room_id)
                 if not room["live_status"] == 1:
                     self.logger.info("⭐️  %s 直播结束 %d", user["info"]["uname"],
                                      room["live_status"])
