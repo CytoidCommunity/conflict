@@ -97,11 +97,11 @@ enable = false
 #Go to {link_bvid} and watch now!
 #"""
 
-# push.mirai: Mirai HTTP API (https://github.com/mamoe/mirai-api-http)
+# push.mirai: Mirai API HTTP (https://github.com/mamoe/mirai-api-http)
 #[push.mirai]
 #addr = "127.0.0.1"
 #port = 8080
-#auth = "************" # authKey in Mirai's configruation
+#auth = "************" # authKey in Mirai API HTTP's configruation
 #users = ["123456789", "987654321"]
 #groups = ["123456789", "987654321"]
 
