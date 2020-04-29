@@ -36,8 +36,7 @@ class Worker:
 
     def run_callback(self, callbacks, arg):
         if callbacks:
-            return asyncio.create_task(
-                asyncio.gather([func(arg) for func in callbacks]))
+            [asyncio.create_task(func(arg)) for func in callbacks]
 
     async def run(self):
         while True:
