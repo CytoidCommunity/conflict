@@ -1,4 +1,3 @@
-import atexit
 from pathlib import Path
 
 from tomlkit.toml_file import TOMLFile
@@ -17,8 +16,3 @@ class ConfigFile(TOMLFile):
 
 config_file = ConfigFile()
 config = config_file.read()
-
-
-@atexit.register
-def _():
-    config_file.write(config)
