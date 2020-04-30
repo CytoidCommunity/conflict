@@ -54,11 +54,11 @@ path = "./data"
 # push: Message pushing.
 [push]
 
-[push.message]
+[push.default]
 # Push Message
 #
 # This is the default template for message pushing.
-# You can override it in [[push.templates]]
+# You can override it in [[push.methods]]
 #
 # Remember the following points:
 # - You can use data returned by bilibili api.
@@ -88,9 +88,9 @@ livestart = """
 快去让TA发光吧! 直播间地址: https://live.bilibili.com/{room_id}
 """
 liveend = "🌟tairitsuru: {uploader} 直播结束, 总时长 {live_duration}."
-# TODO: notifing for new video
+# TODO: notifyfor new video
 
-[[push.templates]]
+[[push.methods]]
 # An unique identifier. It will be used later.
 id = "mirai"
 
@@ -107,10 +107,10 @@ groups = ["123456789", "987654321"]
 
 livestart = [
     { type = "Image", url = "{cover}" },
-    { type = "Plain", text = "🌟tairitsuru: {user_name} 开始直播 {live_title}啦, 快去让TA发光吧! 直播间地址: https://live.bilibili.com/{room_id}" }
+    { type = "Plain", text = "🌟tairitsuru: {user_name} 开始直播 {live_title} 啦, 快去让TA发光吧! 直播间地址: https://live.bilibili.com/{room_id}" }
 ]
 
-[[push.templates]]
+[[push.methods]]
 id = "tg"
 
 # Telegram API

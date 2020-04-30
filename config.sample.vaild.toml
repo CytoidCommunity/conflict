@@ -24,7 +24,7 @@ port = 8118
 
 
 [push]
-[push.message]
+[push.default]
 livestart = """Your favorite uploader {uploader} starts livestreaming! \
                Go to {live_url} and watch now!"""
 liveend = """The uploader {uploader} has ended his livestream. \
@@ -37,7 +37,7 @@ Description: \n\
 Go to {link_bvid} and watch now!
 """
 
-[[push.templates]]
+[[push.methods]]
 id = "mirai"
 type = "mirai"
 apiroot = "http://127.0.0.1:8000"
@@ -45,7 +45,7 @@ auth = "************"
 users = ["123456789", "987654321"]
 groups = ["123456789", "987654321"]
 
-[[push.templates]]
+[[push.methods]]
 id = "tg"
 type = "tg"
 addr = "https://api.telegram.org/"
