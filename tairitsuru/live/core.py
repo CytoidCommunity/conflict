@@ -29,7 +29,7 @@ class Worker:
         self.callback_start = []
         self.callback_end = []
 
-        self.get_play_urls = auto_retry(logger=self.logger)(get_play_urls)
+        self.get_play_urls = auto_retry(0, 1, self.logger)(get_play_urls)
         self.get_room_info = auto_retry(logger=self.logger)(get_room_info)
         self.get_user_info = auto_retry(logger=self.logger)(get_user_info)
 
@@ -62,8 +62,8 @@ class Worker:
             start_at = time.time()
             while True:
                 if self.capture:
-                    filename = "%s-%s.flv" % (
-                        user["info"]["uname"],
+                    filename = "%s-%d-%s.flv" % (
+                        user["info"]["uname"], self.room_id,
                         time.strftime("%Y-%m-%d_%H%M%S", time.localtime()))
                     url_info = await self.get_play_urls(self.room_id)
                     if len(url_info["durl"]) == 0:

@@ -1,5 +1,6 @@
 import asyncio
 import functools
+import sys
 
 
 def auto_retry(max_retries: int = 3, delay: int = 1, logger=None):
@@ -12,16 +13,17 @@ def auto_retry(max_retries: int = 3, delay: int = 1, logger=None):
     def decorator(func):
         try:
             name = func.__name__
-        except:
+        except AttributeError:
             name = "unknown"
 
         @functools.wraps(func)
-        async def warpper(*args, **kwargs):
+        async def wrapper(*args, **kwargs):
             output_args = [str(i) for i in args
                            ] + [f"{k}={v}" for k, v in kwargs.items()]
             output_name = '%s(%s)' % (name, ', '.join(output_args))
             retries = 0
-            while retries <= max_retries:
+            res = None
+            while retries <= max_retries or max_retries == 0:
                 if retries > 0:
                     logger.warning("⏳  Retrying: `%s`, attempts = %d/%d",
                                    output_name, retries, max_retries)
@@ -42,8 +44,8 @@ def auto_retry(max_retries: int = 3, delay: int = 1, logger=None):
             else:
                 logger.error("❌  Failed to run `%s`: max retry count reached.",
                              output_name)
-                return None
+                raise sys.last_value
 
-        return warpper
+        return wrapper
 
     return decorator
