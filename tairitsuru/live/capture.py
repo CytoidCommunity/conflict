@@ -2,7 +2,7 @@ import aiofiles
 import httpx
 
 
-async def capture(url, filename, referer):
+async def capture_stream(url, filename, referer):
     async with httpx.AsyncClient(
             headers={
                 "User-Agent":
@@ -12,7 +12,7 @@ async def capture(url, filename, referer):
                     "Safari/537.36",
                 "Referer": referer
             }
-        ) as client:
+    ) as client:
         async with client.stream("GET", url) as stream:
             stream.raise_for_status()
             async with aiofiles.open(filename, "wb") as f:

@@ -1,3 +1,5 @@
+from typing import Optional
+
 from httpx import AsyncClient
 
 from .exceptions import ApiFailed
@@ -25,8 +27,8 @@ async def get_user_info(room_id: int):
     return _handle_api_result(resp.json())
 
 
-async def get_play_urls(room_id: int):
-    async with AsyncClient() as client:
+async def get_play_urls(room_id: int, proxy_url: Optional[str] = None):
+    async with AsyncClient(proxies=proxy_url) as client:
         resp = await client.get(
             "https://api.live.bilibili.com/room/v1/Room/playUrl",
             params={

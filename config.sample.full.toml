@@ -46,10 +46,6 @@ path = "./data"
 # Available scheme: http, https (socks5 not supported yet)
 #url = "http://localhost:1081/"
 
-# Only use proxy for Bilibili API requests and do not use it for streaming or
-# pushing.
-#bili_api_only = true
-
 
 # push: Message pushing.
 [push]

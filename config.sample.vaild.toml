@@ -14,13 +14,7 @@ path = "./data"
 
 
 [proxy]
-enable = true
-type = "http"
-bili_api_only = true 
-
-[proxy.http]
-addr = "127.0.0.1"
-port = 8118
+url = "http://localhost:1081/"
 
 
 [push]
