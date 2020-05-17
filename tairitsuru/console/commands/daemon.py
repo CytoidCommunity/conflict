@@ -17,18 +17,32 @@ class DaemonCommand(Command):
             self.line_error("")
             return rtn
 
-        from tairitsuru.config import config
-        proxy_url = None
-        if config.get('proxy'):
-            proxy_url = config['proxy']['url']
+        from ...config import config
         watchers = config.get("watchers")
         import asyncio
-        from tairitsuru.live.core import Worker
+        from ...live.core import Worker
         coros = []
         for watcher in watchers:
             if watcher.get("live"):
                 live_conf = watcher["live"]
-                worker = Worker(live_conf["roomid"], live_conf.get('record'), watcher.get('interval'), proxy_url)
+                capture = live_conf.get("capture", False)
+                if self.option("--no-capture"):
+                    capture = False
+                worker = Worker(live_conf["roomid"], capture, watcher.get("interval", 60))
+                if watcher.get("push"):
+                    from ...push import live_start, live_end
+
+                    @worker.on_start
+                    async def _(arg):
+                        if watcher.get("nickname"):
+                            arg = {**arg, "user_name": watcher["nickname"]}
+                        await asyncio.gather(*[live_start(id_, arg) for id_ in watcher["push"]])
+
+                    @worker.on_end
+                    async def _(arg):
+                        if watcher.get("nickname"):
+                            arg = {**arg, "user_name": watcher["nickname"]}
+                        await asyncio.gather(*[live_end(id_, arg) for id_ in watcher["push"]])
                 coros.append(worker.run())
         loop = asyncio.get_event_loop()
         loop.run_until_complete(asyncio.gather(*coros))

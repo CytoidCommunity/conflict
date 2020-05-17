@@ -64,7 +64,7 @@ path = "./data"
 #        {user[info][uname]} will be replaced by user name.
 # - Of course some common components are pre-defined.
 #   Here are them:
-#  * The following components are available in both `livestart` and `liveend`
+#  * The following components are available in both `live_start` and `live_end`
 #    {uid}: alias for {room[uid]} and/or {user[info][uid]}
 #    {room_id}: alias for {room[room_id]}
 #    {live_title}: alias for {room[title]}
@@ -74,17 +74,18 @@ path = "./data"
 #                 (will be replaced by `nickname` if set)
 #    {user_face}: alias for {user[info][face]}
 #    {san}: alias for {user[san]}
-#  * The following components are available in `liveend`:
+#  * The following components are available in `live_end`:
 #    {duration}
+#    {filename}
 # - As a reminder, If you use normal strings (which uses `"` but not `'`)
 #   to write the message, be careful with `\`.
 #
-livestart = """
+live_start = """
 🌟tairitsuru: {user_name} 开始直播 {live_title}啦, \
 快去让TA发光吧! 直播间地址: https://live.bilibili.com/{room_id}
 """
-liveend = "🌟tairitsuru: {uploader} 直播结束, 总时长 {live_duration}."
-# TODO: notifyfor new video
+live_end = "🌟tairitsuru: {uploader} 直播结束, 总时长 {live_duration}."
+# TODO: notify for new video
 
 [[push.methods]]
 # An unique identifier. It will be used later.
@@ -93,15 +94,16 @@ id = "mirai"
 # Available types: cqhttp, mirai, telegram
 # QQ HOO!K Support might be added later.
 type = "mirai" # Mirai API HTTP (https://github.com/mamoe/mirai-api-http)
-apiroot = "http://127.0.0.1:8080/"
-auth = "************" # authKey in Mirai API HTTP's configruation
-users = ["123456789", "987654321"]
-groups = ["123456789", "987654321"]
+api_root = "http://127.0.0.1:8080/"
+auth_key = "************" # authKey in Mirai API HTTP's configruation
+qq = 123456789 # Your bot's QQ
+users = [123456789, 987654321]
+groups = [123456789, 987654321]
 
 # Message template overriding.
 # In this example, we use Mirai API HTTP's message chain
 
-livestart = [
+live_start = [
     { type = "Image", url = "{cover}" },
     { type = "Plain", text = "🌟tairitsuru: {user_name} 开始直播 {live_title} 啦, 快去让TA发光吧! 直播间地址: https://live.bilibili.com/{room_id}" }
 ]
@@ -143,7 +145,7 @@ roomid = 22114797
 # Enable notifing for his livestream.
 notify = true
 # Do not miss any livestream! Let's record it.
-record = true
+capture = true
 
 
 # Add more watchers!
@@ -153,7 +155,7 @@ record = true
 #[watchers.live]
 #roomid = 654321
 #notify = true
-#record = false
+#capture = false
 
 #...
 

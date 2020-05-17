@@ -27,8 +27,22 @@ class CheckCommand(Command):
             self.error(str(e) + "\nInvalid TOML file format.")
             return self.end()
 
-        # Check watchers
+        # Proxy
+        proxy = config.get("proxy")
+        if proxy:
+            try:
+                from httpx import Proxy
+                _ = Proxy(proxy['url'])
+            except KeyError:
+                self.error("Using proxy, but no url is given.")
+            except TypeError:
+                self.error("\"proxy\" is not a table.")
+            except ValueError as e:
+                self.error(e.args)
+
+        # Watchers
         watchers = config.get("watchers")
         if not watchers:
             self.error("No watchers configured.")
+
         return self.end()

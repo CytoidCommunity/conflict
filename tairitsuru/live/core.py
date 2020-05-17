@@ -6,8 +6,9 @@ import time
 from functools import partial
 from typing import Optional
 
-from tairitsuru.logger import Logger
-from tairitsuru.misc import auto_retry
+from ..config import config
+from ..logger import Logger
+from ..misc import auto_retry
 
 from .api import get_play_urls, get_room_info, get_user_info
 from .capture import capture_stream
@@ -22,8 +23,7 @@ class Worker:
     def __init__(self,
                  room_id: int,
                  capture: Optional[bool] = False,
-                 check_interval: Optional[int] = 60,
-                 proxy_url: Optional[str] = None):
+                 check_interval: Optional[int] = 60):
 
         self.room_id = room_id
         self.capture = capture
@@ -32,6 +32,10 @@ class Worker:
         self.logger = Logger(f"{room_id}.live")
         self.callback_start = []
         self.callback_end = []
+
+        proxy_url = None
+        if config.get("proxy"):
+            proxy_url = config["proxy"]["url"]
 
         self.get_play_urls = auto_retry(0, 1, self.logger)(partial(get_play_urls, proxy_url=proxy_url))
         self.get_room_info = auto_retry(logger=self.logger)(get_room_info)
