@@ -1,22 +1,22 @@
 [tool.poetry]
-name = "tairitsuru"
+name = "conflict"
 version = "0.1.0"
 description = "The automatic Bilibili watcher."
 license = "GPL-3.0-only"
 authors = [
-    "water-lift <0xWATERx0@gmail.com>",
+    "AsakuraMizu <0xWATERx0@gmail.com>",
     "ZeroAurora <zeroaurora233@outlook.com>"
 ]
 
 readme = "README.md"
 
-homepage = "https://github.com/CytoidCommunity/tairitsuru"
-repository = "https://github.com/CytoidCommunity/tairitsuru"
+homepage = "https://github.com/CytoidCommunity/conflict"
+repository = "https://github.com/CytoidCommunity/conflict"
 
 keywords = ["live", "bilibili"]
 
 classifiers=[
-    "Development Status :: 1 - Planning",
+    "Development Status :: 2 - Pre-Alpha",
     "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
     "Operating System :: OS Independent",
     "Programming Language :: Python :: 3",
@@ -28,7 +28,7 @@ classifiers=[
 ]
 
 packages = [
-    { include = "tairitsuru" }
+    { include = "conflict" }
 ]
 
 
@@ -55,7 +55,7 @@ s3 = ["aioboto3"]
 telegram = ["python-telegram-bot"]
 
 [tool.poetry.scripts]
-tairitsuru = "tairitsuru.console:main"
+conflict = "conflict.console:main"
 
 [build-system]
 requires = ["poetry>=0.12"]

@@ -1,7 +1,7 @@
 """
 Provide logger helper.
 
-Any other modules in tairitsuru should use `Logger` from this module to log messages.
+Any other modules in conflict should use `Logger` from this module to log messages.
 """
 import logging
 import pathlib

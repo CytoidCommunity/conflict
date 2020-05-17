@@ -2,11 +2,11 @@ import asyncio
 from typing import Any, Dict, List, Union
 
 import aiomirai
-import aiomirai.logger
+import aiomirai.api
 
 from ..logger import Logger
 
-aiomirai.logger.Api = Logger("push_mirai")
+aiomirai.api.Logger = Logger("push_mirai")
 
 
 async def send(msg: Union[str, List[Dict[str, Any]]], **kwargs):

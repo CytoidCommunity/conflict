@@ -3,7 +3,7 @@ from cleo import Command, option
 
 class DaemonCommand(Command):
     name = "daemon"
-    description = "Start tairitsuru daemon"
+    description = "Start conflict daemon"
     help = "This will automatically read your configuration file and start " \
            "watching as long as your configuration file is valid."
     options = [option("--no-capture", None, "Do not capture")]
@@ -13,7 +13,7 @@ class DaemonCommand(Command):
         if rtn != 0:
             self.line_error("Invalid configuration file. Try:", "error")
             self.line_error("")
-            self.line_error("  tairitsuru check", "info")
+            self.line_error("  conflict check", "info")
             self.line_error("")
             return rtn
 
@@ -26,7 +26,7 @@ class DaemonCommand(Command):
             if watcher.get("live"):
                 live_conf = watcher["live"]
                 capture = live_conf.get("capture", False)
-                if self.option("--no-capture"):
+                if self.option("no-capture"):
                     capture = False
                 worker = Worker(live_conf["roomid"], capture, watcher.get("interval", 60))
                 if watcher.get("push"):

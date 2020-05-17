@@ -8,7 +8,7 @@ _methods: dict = {}
 
 
 async def _push(type, msg, **kwargs):
-    sender = import_module(f"tairitsuru.push.{type}")
+    sender = import_module(f"conflict.push.{type}")
     await sender.send(msg, **kwargs)
 
 

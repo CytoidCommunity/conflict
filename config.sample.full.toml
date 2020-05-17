@@ -1,8 +1,8 @@
-# This is the configuration example of Tairitsuru.
+# This is the configuration example of Conflict.
 # It contains the detailed explaintion. If you feel it's too complex, 
-# have a look at `tairitsuru_conf.vaild.toml`.
+# have a look at `conflict_conf.vaild.toml`.
 
-# Tairitsuru uses TOML (Tom's Obvious, Minimal Language) as its configuration
+# Conflict uses TOML (Tom's Obvious, Minimal Language) as its configuration
 # language. See <https://github.com/toml-lang/toml> for its specification.
 
 
@@ -32,7 +32,7 @@ path = "./data"
 # Storage.
 #
 #endpoint = "https://example.someservice.com/"
-#bucket = "tairitsuru"
+#bucket = "conflict"
 #access_key = "************"
 #access_secret = "************"
 #addressing_style = "auto" # If you don't know, just leave it "auto".
@@ -81,10 +81,10 @@ path = "./data"
 #   to write the message, be careful with `\`.
 #
 live_start = """
-🌟tairitsuru: {user_name} 开始直播 {live_title}啦, \
+🌟conflict: {user_name} 开始直播 {live_title}啦, \
 快去让TA发光吧! 直播间地址: https://live.bilibili.com/{room_id}
 """
-live_end = "🌟tairitsuru: {uploader} 直播结束, 总时长 {live_duration}."
+live_end = "🌟conflict: {uploader} 直播结束, 总时长 {duration}."
 # TODO: notify for new video
 
 [[push.methods]]
@@ -105,7 +105,7 @@ groups = [123456789, 987654321]
 
 live_start = [
     { type = "Image", url = "{cover}" },
-    { type = "Plain", text = "🌟tairitsuru: {user_name} 开始直播 {live_title} 啦, 快去让TA发光吧! 直播间地址: https://live.bilibili.com/{room_id}" }
+    { type = "Plain", text = "🌟conflict: {user_name} 开始直播 {live_title} 啦, 快去让TA发光吧! 直播间地址: https://live.bilibili.com/{room_id}" }
 ]
 
 [[push.methods]]

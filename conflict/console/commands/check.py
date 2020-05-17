@@ -22,7 +22,7 @@ class CheckCommand(Command):
 
     def handle(self):
         try:
-            from tairitsuru.config import config
+            from ...config import config
         except ParseError as e:
             self.error(str(e) + "\nInvalid TOML file format.")
             return self.end()

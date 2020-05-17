@@ -1,5 +1,5 @@
 """
-The core algorithm of tairitsuru.
+The core algorithm of conflict.
 """
 import asyncio
 import time
