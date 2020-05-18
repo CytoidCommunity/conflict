@@ -79,7 +79,7 @@ description = "A framework for Tencent QQ headless client 'Mirai'."
 name = "aiomirai"
 optional = true
 python-versions = ">=3.7"
-version = "0.3.4"
+version = "0.3.5"
 
 [package.dependencies]
 httpx = "*"
@@ -87,6 +87,7 @@ httpx = "*"
 [package.extras]
 all = ["quart"]
 report = ["quart"]
+ws = ["websockets"]
 
 [[package]]
 category = "main"
@@ -607,7 +608,7 @@ s3 = ["aioboto3"]
 telegram = ["python-telegram-bot"]
 
 [metadata]
-content-hash = "a4be656e8be4dc21f176d5ed98c70ef6560f72b72f65596d78a8d196b59fc309"
+content-hash = "f6e9db96bc3f7a01bd7e286a473877cd177add9b7197ea66f2e8fe54cec81417"
 python-versions = "^3.7"
 
 [metadata.files]
@@ -642,8 +643,8 @@ aioitertools = [
     {file = "aioitertools-0.7.0.tar.gz", hash = "sha256:341cb05a0903177ef1b73d4cc12c92aee18e81c364e0138f4efc7ec3c47b8177"},
 ]
 aiomirai = [
-    {file = "aiomirai-0.3.4-py3-none-any.whl", hash = "sha256:bef3047421c6cee1bf9c794a81309ef8294fc75d79c64779fa4b6c75b2d677be"},
-    {file = "aiomirai-0.3.4.tar.gz", hash = "sha256:53b5a433adcd3262fee7e8237552f72f4d907f750441015cb338d1bc1c94f2a3"},
+    {file = "aiomirai-0.3.5-py3-none-any.whl", hash = "sha256:dc842e94d26cdd4825f396255dc0a38e313f93520f26eff33a792830bac8d4a5"},
+    {file = "aiomirai-0.3.5.tar.gz", hash = "sha256:0e8bb0a6cd70b501b49363f1b4d439f94347e499275e9e1cd014f0d4c03f1a01"},
 ]
 appdirs = [
     {file = "appdirs-1.4.4-py2.py3-none-any.whl", hash = "sha256:a841dacd6b99318a741b166adb07e19ee71a274450e68237b4650ca1055ab128"},
