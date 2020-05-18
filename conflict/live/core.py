@@ -98,6 +98,7 @@ class Worker:
                         self.callback_end, {
                             "room": room,
                             "user": user,
-                            "duration": end_at - start_at,
+                            "duration": time.strftime("%H:%M:%S", time.gmtime(end_at - start_at)),
                             "filename": filename if self.capture else None
                         })
+                    break
