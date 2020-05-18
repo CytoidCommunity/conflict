@@ -80,11 +80,8 @@ path = "./data"
 # - As a reminder, If you use normal strings (which uses `"` but not `'`)
 #   to write the message, be careful with `\`.
 #
-live_start = """
-🌟conflict: {user_name} 开始直播 {live_title}啦, \
-快去让TA发光吧! 直播间地址: https://live.bilibili.com/{room_id}
-"""
-live_end = "🌟conflict: {uploader} 直播结束, 总时长 {duration}."
+live_start = "🌟conflict: {user_name} 正在直播 {live_title} ！快去单推吧! 直播间地址: https://live.bilibili.com/{room_id}"
+live_end = "🌟conflict: {user_name} 直播 {live_title} 结束, 总时长 {duration}."
 # TODO: notify for new video
 
 [[push.methods]]
@@ -105,7 +102,7 @@ groups = [123456789, 987654321]
 
 live_start = [
     { type = "Image", url = "{cover}" },
-    { type = "Plain", text = "🌟conflict: {user_name} 开始直播 {live_title} 啦, 快去让TA发光吧! 直播间地址: https://live.bilibili.com/{room_id}" }
+    { type = "Plain", text = "🌟conflict: {user_name} 正在直播 {live_title} ！快去单推吧! 直播间地址: https://live.bilibili.com/{room_id}" }
 ]
 
 [[push.methods]]

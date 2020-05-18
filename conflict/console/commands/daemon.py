@@ -31,18 +31,22 @@ class DaemonCommand(Command):
                 worker = Worker(live_conf["roomid"], capture, watcher.get("interval", 60))
                 if watcher.get("push"):
                     from ...push import live_start, live_end
+                    
+                    def gen(watcher):
+                        @worker.on_start
+                        async def _(arg):
+                            if watcher.get("nickname"):
+                                arg = {**arg, "user_name": watcher["nickname"]}
+                            await asyncio.gather(*[live_start(id_, arg) for id_ in watcher["push"]])
 
-                    @worker.on_start
-                    async def _(arg):
-                        if watcher.get("nickname"):
-                            arg = {**arg, "user_name": watcher["nickname"]}
-                        await asyncio.gather(*[live_start(id_, arg) for id_ in watcher["push"]])
+                        @worker.on_end
+                        async def _(arg):
+                            if watcher.get("nickname"):
+                                arg = {**arg, "user_name": watcher["nickname"]}
+                            await asyncio.gather(*[live_end(id_, arg) for id_ in watcher["push"]])
 
-                    @worker.on_end
-                    async def _(arg):
-                        if watcher.get("nickname"):
-                            arg = {**arg, "user_name": watcher["nickname"]}
-                        await asyncio.gather(*[live_end(id_, arg) for id_ in watcher["push"]])
+                    gen(watcher)
+
                 coros.append(worker.run())
         loop = asyncio.get_event_loop()
         loop.run_until_complete(asyncio.gather(*coros))
