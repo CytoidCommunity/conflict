@@ -1,6 +1,6 @@
 # This is the configuration example of Conflict.
 # It contains the detailed explaintion. If you feel it's too complex, 
-# have a look at `conflict_conf.vaild.toml`.
+# have a look at `config.sample.vaild.toml`.
 
 # Conflict uses TOML (Tom's Obvious, Minimal Language) as its configuration
 # language. See <https://github.com/toml-lang/toml> for its specification.
@@ -135,15 +135,11 @@ push = ["mirai", "tg"]
 [watchers.video]
 # You MUST set a uid.
 uid = 3234445
-# Enable notifing for his new video.
-notify = true
 
 # Livestream Related Part
 [watchers.live]
 # If you want to use live related features, you should set a roomid.
 roomid = 22114797
-# Enable notifing for his livestream.
-notify = true
 # Do not miss any livestream! Let's record it.
 capture = true
 
@@ -154,7 +150,6 @@ capture = true
 #uid = 123456
 #[watchers.live]
 #roomid = 654321
-#notify = true
 #capture = false
 
 #...
