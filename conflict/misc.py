@@ -37,7 +37,7 @@ def auto_retry(max_retries: int = 3, delay: int = 1, logger=None):
                     retries += 1
                 else:
                     break
-            if retries <= max_retries:
+            if retries <= max_retries or max_retries == 0:
                 logger.info("☑️  Successfully run `%s` after %d retries.",
                             output_name, retries)
                 return res
