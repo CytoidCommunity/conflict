@@ -1,5 +1,3 @@
-import sys
-
 from appdirs import AppDirs
 
 appdir = AppDirs("conflict", "CytoidCommunity")

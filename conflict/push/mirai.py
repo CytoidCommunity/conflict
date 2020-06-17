@@ -1,12 +1,13 @@
 import asyncio
+from logging import DEBUG
 from typing import Any, Dict, List, Union
 
 import aiomirai
-import aiomirai.api
+import aiomirai.logger
 
 from ..logger import Logger
 
-aiomirai.api.Logger = Logger("push_mirai")
+aiomirai.logger.Api = Logger("push.mirai", file_level=DEBUG)
 
 
 async def send(msg: Union[str, List[Dict[str, Any]]], **kwargs):
@@ -14,9 +15,7 @@ async def send(msg: Union[str, List[Dict[str, Any]]], **kwargs):
     auth_key = kwargs["auth_key"]
     qq = kwargs["qq"]
     api = aiomirai.SessionApi(api_root, auth_key, qq)
-
     msg = aiomirai.MessageChain(msg)
-
     coros = []
     for user in kwargs.get("users", []):
         coros.append(api.send_friend_message(target=user, message_chain=msg))

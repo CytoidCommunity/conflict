@@ -37,9 +37,9 @@ class Worker:
         if config.get("proxy"):
             proxy_url = config["proxy"]["url"]
 
-        self.get_play_urls = auto_retry(0, 1, self.logger)(partial(get_play_urls, proxy_url=proxy_url))
-        self.get_room_info = auto_retry(logger=self.logger)(get_room_info)
-        self.get_user_info = auto_retry(logger=self.logger)(get_user_info)
+        self.get_play_urls = auto_retry(self.logger)(partial(get_play_urls, proxy_url=proxy_url))
+        self.get_room_info = auto_retry(self.logger)(get_room_info)
+        self.get_user_info = auto_retry(self.logger)(get_user_info)
 
     def on_start(self, func):
         self.callback_start.append(func)
@@ -52,13 +52,11 @@ class Worker:
             room = await self.get_room_info(self.room_id)
             user = await self.get_user_info(self.room_id)
             if not room["live_status"] == 1:
-                self.logger.info("⭐️  %s 不在直播 %d", user["info"]["uname"],
-                                 room["live_status"])
+                self.logger.info("⭐️  %s 不在直播 %d", user["info"]["uname"], room["live_status"])
                 await asyncio.sleep(self.check_interval)
                 continue
 
-            self.logger.info("⭐️  %s 直播中 %s", user["info"]["uname"],
-                             room["live_time"])
+            self.logger.info("⭐️  %s 直播中 %s", user["info"]["uname"], room["live_time"])
             run_callback(self.callback_start, {
                 "room": room,
                 "user": user
@@ -75,24 +73,20 @@ class Worker:
                         self.logger.error("❌  Stream list is empty.")
                     else:
                         url = url_info["durl"][0]["url"]
-                        self.logger.info("☑️  视频流捕获 Qual.%d",
-                                         url_info["current_quality"])
+                        self.logger.info("☑️  视频流捕获 Qual.%d", url_info["current_quality"])
                         self.logger.info("    %s", url)
                         self.logger.info("🌟  点亮爱豆……")
-                        self.logger.info(
-                            "    开始发光：%s",
-                            time.strftime("%Y-%m-%d %H:%M:%S",
-                                          time.localtime()))
+                        self.logger.info("    开始发光：%s", time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
                         self.logger.info("    %s", filename)
-                        await capture_stream(
-                            url, filename,
-                            "https://live.bilibili.com/%d" % self.room_id)
+                        try:
+                            await capture_stream(url, filename, "https://live.bilibili.com/%d" % self.room_id)
+                        except TimeoutError:
+                            pass
                 else:
                     await asyncio.sleep(self.check_interval)
                 room = await self.get_room_info(self.room_id)
                 if not room["live_status"] == 1:
-                    self.logger.info("⭐️  %s 直播结束 %d", user["info"]["uname"],
-                                     room["live_status"])
+                    self.logger.info("⭐️  %s 直播结束 %d", user["info"]["uname"], room["live_status"])
                     end_at = time.time()
                     run_callback(
                         self.callback_end, {

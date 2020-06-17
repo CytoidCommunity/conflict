@@ -3,7 +3,7 @@ import functools
 import sys
 
 
-def auto_retry(max_retries: int = 3, delay: int = 1, logger=None):
+def auto_retry(logger=None, delay: int = 3):
     if not logger:
         import logging
         logger = logging.getLogger()
@@ -18,33 +18,23 @@ def auto_retry(max_retries: int = 3, delay: int = 1, logger=None):
 
         @functools.wraps(func)
         async def wrapper(*args, **kwargs):
-            output_args = [str(i) for i in args
-                           ] + [f"{k}={v}" for k, v in kwargs.items()]
+            output_args = [str(i) for i in args] + [f"{k}={v}" for k, v in kwargs.items()]
             output_name = '%s(%s)' % (name, ', '.join(output_args))
             retries = 0
-            res = None
-            while retries <= max_retries or max_retries == 0:
+            while True:
                 if retries > 0:
-                    logger.warning("⏳  Retrying: `%s`, attempts = %d/%d",
-                                   output_name, retries, max_retries)
+                    logger.warning("⏳  Retrying: `%s`, attempts = %d", output_name, retries)
                 try:
                     res = await func(*args, **kwargs)
                 except:
                     logger.exception(
-                        "⚠️  An error occurred while running `%s`:",
-                        output_name)
+                        "⚠️  An error occurred while running `%s`:", output_name)
                     await asyncio.sleep(delay)
                     retries += 1
                 else:
                     break
-            if retries <= max_retries:
-                logger.info("☑️  Successfully run `%s` after %d retries.",
-                            output_name, retries)
-                return res
-            else:
-                logger.error("❌  Failed to run `%s`: max retry count reached.",
-                             output_name)
-                raise sys.last_value
+            logger.debug("☑️  Successfully run `%s` after %d retries.", output_name, retries)
+            return res
 
         return wrapper
 

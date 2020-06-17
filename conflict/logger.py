@@ -19,8 +19,7 @@ def Logger(name, console_level=logging.WARNING, file_level=logging.INFO):
         return logger
 
     console_handler = logging.StreamHandler(sys.stdout)
-    console_handler.setFormatter(
-        logging.Formatter("[%(asctime)s %(name)s] %(levelname)s: %(message)s"))
+    console_handler.setFormatter(logging.Formatter("[%(asctime)s %(name)s] %(levelname)s: %(message)s"))
     console_handler.setLevel(console_level)
     logger.addHandler(console_handler)
 
@@ -30,8 +29,7 @@ def Logger(name, console_level=logging.WARNING, file_level=logging.INFO):
     log_file_path.touch(exist_ok=True)
 
     file_handler = logging.FileHandler(log_file_path)
-    file_handler.setFormatter(
-        logging.Formatter("[%(asctime)s] %(levelname)s: %(message)s"))
+    file_handler.setFormatter(logging.Formatter("[%(asctime)s] %(levelname)s: %(message)s"))
     file_handler.setLevel(file_level)
     logger.addHandler(file_handler)
 
