@@ -1,6 +1,5 @@
 import asyncio
 import functools
-import sys
 
 
 def auto_retry(logger=None, delay: int = 3):

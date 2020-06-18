@@ -29,7 +29,12 @@ class Worker:
         self.capture = capture
         self.check_interval = check_interval
 
-        self.logger = Logger(f"{room_id}.live")
+        if config.get("debug"):
+            import logging
+            self.logger = Logger(f"{room_id}.live", logging.INFO, logging.DEBUG)
+        else:
+            self.logger = Logger(f"{room_id}.live")
+
         self.callback_start = []
         self.callback_end = []
 

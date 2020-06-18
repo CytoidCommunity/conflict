@@ -13,7 +13,7 @@ from .locations import LOG_DIR
 def Logger(name, console_level=logging.WARNING, file_level=logging.INFO):
 
     logger = logging.getLogger(name)
-    logger.setLevel(logging.DEBUG)
+    logger.setLevel(logging.INFO)
 
     if logger.hasHandlers():
         return logger

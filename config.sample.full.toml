@@ -8,6 +8,9 @@
 
 ## START EXAMPLE
 
+# debug: enable debug mode or not
+# debug = true
+
 # transcoding: I've heard that you love mp4.
 [transcoding]
 # By default, the livestream is ".flv" file.
