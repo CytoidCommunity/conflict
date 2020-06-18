@@ -83,7 +83,7 @@ class Worker:
             start_at = time.time()
             while True:
                 if self.capture:
-                    await self.capture_stream(room, user)
+                    await self.capture_stream(user, room)
                 else:
                     await asyncio.sleep(self.check_interval)
                 room = await self.get_room_info(self.room_id)
