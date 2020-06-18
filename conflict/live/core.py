@@ -3,7 +3,7 @@ The core algorithm of conflict.
 """
 import asyncio
 import time
-from functools import partial
+from functools import partial, wraps
 from typing import Optional
 
 from ..config import config
@@ -33,11 +33,8 @@ class Worker:
         self.callback_start = []
         self.callback_end = []
 
-        proxy_url = None
-        if config.get("proxy"):
-            proxy_url = config["proxy"]["url"]
-
-        self.get_play_urls = auto_retry(self.logger)(partial(get_play_urls, proxy_url=proxy_url))
+        self.get_play_urls = auto_retry(self.logger)(
+            wraps(get_play_urls)(partial(get_play_urls, get_play_url=config.get("get_play_url", {}).get("url"))))
         self.get_room_info = auto_retry(self.logger)(get_room_info)
         self.get_user_info = auto_retry(self.logger)(get_user_info)
 
@@ -70,7 +67,7 @@ class Worker:
                         time.strftime("%Y-%m-%d_%H%M%S", time.localtime()))
                     url_info = await self.get_play_urls(self.room_id)
                     if len(url_info["durl"]) == 0:
-                        self.logger.error("❌  Stream list is empty.")
+                        self.logger.log("❌  Stream list is empty.")
                     else:
                         url = url_info["durl"][0]["url"]
                         self.logger.info("☑️  视频流捕获 Qual.%d", url_info["current_quality"])

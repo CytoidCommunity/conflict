@@ -27,10 +27,11 @@ async def get_user_info(room_id: int):
     return _handle_api_result(resp.json())
 
 
-async def get_play_urls(room_id: int, proxy_url: Optional[str] = None):
-    async with AsyncClient(proxies=proxy_url) as client:
+async def get_play_urls(room_id: int, get_play_url: Optional[str] = None):
+    base_url = (get_play_url or "https://api.live.bilibili.com/room/v1/Room").rstrip("/") + "/"
+    async with AsyncClient() as client:
         resp = await client.get(
-            "https://api.live.bilibili.com/room/v1/Room/playUrl",
+            base_url + "playUrl",
             params={
                 "cid": room_id,
                 "quality": 4

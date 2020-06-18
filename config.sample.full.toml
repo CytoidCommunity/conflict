@@ -38,13 +38,9 @@ path = "./data"
 #addressing_style = "auto" # If you don't know, just leave it "auto".
 
 
-# proxy: The usage of proxies.
-# Bilibili's API bans the requests from most cloud computing platforms.
-# We may bypass this restriction by using a proxy.
-#[proxy]
-
-# Available scheme: http, https (socks5 not supported yet)
-#url = "http://localhost:1081/"
+# get_play_url: https://github.com/CytoidCommunity/getPlayUrl
+[get_play_url]
+url = "https://1.solariar.tech:32000/"
 
 
 # push: Message pushing.
