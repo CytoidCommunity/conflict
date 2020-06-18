@@ -42,6 +42,7 @@ class Worker:
             wraps(get_play_urls)(partial(get_play_urls, get_play_url=config.get("get_play_url", {}).get("url"))))
         self.get_room_info = auto_retry(self.logger)(get_room_info)
         self.get_user_info = auto_retry(self.logger)(get_user_info)
+        self.capture_stream = auto_retry(self.logger)(capture_stream)
 
     def on_start(self, func):
         self.callback_start.append(func)
@@ -80,10 +81,7 @@ class Worker:
                         self.logger.info("🌟  点亮爱豆……")
                         self.logger.info("    开始发光：%s", time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
                         self.logger.info("    %s", filename)
-                        try:
-                            await capture_stream(url, filename, "https://live.bilibili.com/%d" % self.room_id)
-                        except TimeoutError:
-                            pass
+                        await self.capture_stream(url, filename, "https://live.bilibili.com/%d" % self.room_id)
                 else:
                     await asyncio.sleep(self.check_interval)
                 room = await self.get_room_info(self.room_id)
