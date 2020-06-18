@@ -6,11 +6,11 @@ def validate_url(url):
     from rfc3986.api import uri_reference
     from rfc3986.exceptions import ValidationError
     from rfc3986.validators import Validator
-    validator = Validator().require_presence_of('scheme', 'host').allow_hosts('http', 'https')
+    validator = Validator().require_presence_of('scheme', 'host').allow_schemes('http', 'https')
     try:
         validator.validate(uri_reference(url))
     except ValidationError as e:
-        return str(e)
+        return e[0]
 
 
 class CheckCommand(Command):
@@ -36,7 +36,7 @@ class CheckCommand(Command):
         try:
             from ...config import config
         except ParseError as e:
-            self.log(str(e))
+            self.log(e[0])
             self.log("Invalid TOML file format.")
             return self.exit()
 
