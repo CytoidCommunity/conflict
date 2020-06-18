@@ -42,7 +42,23 @@ class Worker:
             wraps(get_play_urls)(partial(get_play_urls, get_play_url=config.get("get_play_url", {}).get("url"))))
         self.get_room_info = auto_retry(self.logger)(get_room_info)
         self.get_user_info = auto_retry(self.logger)(get_user_info)
-        self.capture_stream = auto_retry(self.logger)(capture_stream)
+        self.capture_stream = auto_retry(self.logger)(self._capture_stream)
+
+    async def _capture_stream(self, user, room):
+        filename = "%s-%d-%s.flv" % (
+            user["info"]["uname"], room["room_id"],
+            time.strftime("%Y-%m-%d_%H%M%S", time.localtime()))
+        url_info = await self.get_play_urls(self.room_id)
+        if len(url_info["durl"]) == 0:
+            self.logger.log("❌  Stream list is empty.")
+        else:
+            url = url_info["durl"][0]["url"]
+            self.logger.info("☑️  视频流捕获 Qual.%d", url_info["current_quality"])
+            self.logger.info("    %s", url)
+            self.logger.info("🌟  点亮爱豆……")
+            self.logger.info("    开始发光：%s", time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
+            self.logger.info("    %s", filename)
+            await capture_stream(url, filename, "https://live.bilibili.com/%d" % room["room_id"])
 
     def on_start(self, func):
         self.callback_start.append(func)
@@ -66,22 +82,8 @@ class Worker:
             })
             start_at = time.time()
             while True:
-                filename = None
                 if self.capture:
-                    filename = "%s-%d-%s.flv" % (
-                        user["info"]["uname"], self.room_id,
-                        time.strftime("%Y-%m-%d_%H%M%S", time.localtime()))
-                    url_info = await self.get_play_urls(self.room_id)
-                    if len(url_info["durl"]) == 0:
-                        self.logger.log("❌  Stream list is empty.")
-                    else:
-                        url = url_info["durl"][0]["url"]
-                        self.logger.info("☑️  视频流捕获 Qual.%d", url_info["current_quality"])
-                        self.logger.info("    %s", url)
-                        self.logger.info("🌟  点亮爱豆……")
-                        self.logger.info("    开始发光：%s", time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
-                        self.logger.info("    %s", filename)
-                        await self.capture_stream(url, filename, "https://live.bilibili.com/%d" % self.room_id)
+                    await self.capture_stream(room, user)
                 else:
                     await asyncio.sleep(self.check_interval)
                 room = await self.get_room_info(self.room_id)
@@ -92,7 +94,6 @@ class Worker:
                         self.callback_end, {
                             "room": room,
                             "user": user,
-                            "duration": time.strftime("%H:%M:%S", time.gmtime(end_at - start_at)),
-                            "filename": filename if self.capture else None
+                            "duration": time.strftime("%H:%M:%S", time.gmtime(end_at - start_at))
                         })
                     break
