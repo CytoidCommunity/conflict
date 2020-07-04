@@ -1,0 +1,155 @@
+# This is the configuration example of Conflict.
+# It contains the detailed explaintion. If you feel it's too complex,
+# have a look at `config.sample.vaild.toml`.
+
+# Conflict uses TOML (Tom's Obvious, Minimal Language) as its configuration
+# language. See <https://github.com/toml-lang/toml> for its specification.
+
+
+## START EXAMPLE
+
+## General Options
+
+# logging level
+log_level = "INFO"
+
+# get_play_url: https://github.com/CytoidCommunity/getPlayUrl
+#get_play_url = "https://1.solariar.tech:32000/"
+
+# Set the interval between two checks for new events. (Default: 60 seconds)
+# Don't set it to less than 60s, or you may be banned by Bilibili.
+check_interval = 60
+
+# Set the delay between each retry. (Default: 3 seconds)
+retry_delay = 3
+
+# Output directory for captured video.
+output = "."
+
+
+## transcoding: I've heard that you love mp4.
+[transcoding]
+# Originally, the livestream is ".flv" file.
+# You can choose to transcode it to other formarts using ffmpeg. Relax - It's really fast!
+format = "mp4" # You can use any format supported by ffmpeg.
+
+# Keeps the original flv file or not. (default: false)
+keep_origin = false
+
+
+#[s3]
+# I don't think I need to explain the following things if you use S3.
+#endpoint_url = "https://example.someservice.com/"
+#bucket = "conflict"
+#access_key_id = "************"
+#secret_access_key = "************"
+#addressing_style = "auto" # Available styles: auto (default), virtual, path
+#max_retry = 5 # Default: 5
+
+
+## push: Message pushing.
+[push]
+
+[push.fallback]
+# Push Message
+#
+# This is the fallback template for message pushing.
+# You can override it in [[push.methods]]
+#
+# Remember the following points:
+# - You can use data returned by `getInfoByRoom` api. (api.live.bilibili.com/xlive/web-room/v1/index/getInfoByRoom)
+#   e.g. {room_info[cover]} will be replaced by cover image url.
+#        {anchor_info[base_info][uname]} will be replaced by anchor's name.
+# - Of course some common components are pre-defined.
+#   Here are them:
+#  * The following components are available in both `live_start` and `live_end`
+#    {uid}: alias for {room_info[uid]}
+#    {room_id}: alias for {room_info[room_id]}
+#    {live_title}: alias for {room_info[title]}
+#    {cover}: alias for {room_info[cover]}
+#    {background}: alias for {room_info[background]}
+#    {keyframe}: alias for {room_info[keyframe]}
+#    {parent_area_name}: alias for {room_info[parent_area_name]}
+#    {area_name}: alias for {room_info[area_name]}
+#    {user_name}: alias for {anchor_info[base_info][uname]}
+#                 (will be replaced by `nickname` if set)
+#    {user_face}: alias for {anchor_info[base_info][face]}
+#  * The following components are available in `live_end`:
+#    {duration}: human readable live duration
+# - As a reminder, If you use normal strings (which uses `"` but not `'`)
+#   to write the message, be careful with `\`.
+#
+live_start = "🌟conflict: {user_name} 正在直播 {live_title} ！快去单推吧! 直播间地址: https://live.bilibili.com/{room_id}"
+live_end = "🌟conflict: {user_name} 直播 {live_title} 结束, 总时长 {duration}."
+
+[[push.methods]]
+# An unique identifier. It will be used later.
+id = "mirai"
+
+# Available types: cqhttp, mirai, mastodon, telegram
+type = "mirai" # Mirai API HTTP (https://github.com/mamoe/mirai-api-http)
+api_root = "http://127.0.0.1:8080/"
+auth_key = "************" # authKey in Mirai API HTTP's configruation
+qq = 123456789 # Your bot's QQ
+users = [123456789, 987654321]
+groups = [123456789, 987654321]
+
+# Message template overriding.
+# In this example, we use Mirai API HTTP's message chain.
+
+live_start = [
+    { type = "Image", url = "{cover}" },
+    { type = "Plain", text = "🌟conflict: {user_name} 正在直播 {live_title} ！快去单推吧! 直播间地址: https://live.bilibili.com/{room_id}" }
+]
+
+[[push.methods]]
+id = "acg.mn"
+type = "mastodon" # Mastodon (https://joinmastodon.org/)
+instance = "acg.mn" # Domain name of an instance, i.e. ‘mastodon.social’
+access_token = "************" # Your app's access token
+
+# Message template overriding.
+# In this example, we use some special tricks.
+# See `conflict.push.mastodon.Status`
+
+live_start = { media = "{cover}", status = "🌟conflict: {user_name} 正在直播 {live_title} ！快去单推吧! 直播间地址: https://live.bilibili.com/{room_id}" }
+
+[[push.methods]]
+id = "tg"
+
+# Telegram API
+type = "telegram"
+token = "************" # token in Telegram's @BotFather
+chat_ids = ["@test", "-123456789"]
+
+# Message template overriding.
+# In this example, we use some special tricks.
+# See `conflict.push.telegram.Photo`
+
+live_start = { photo = "{cover}", caption = "🌟conflict: {user_name} 正在直播 {live_title} ！快去单推吧! 直播间地址: https://live.bilibili.com/{room_id}" }
+
+
+## --- Now comes the most important part! ---
+## watchers: Who do you want to watch?
+# Let's take AsakuraMizu (roomid: 8123199) for example.
+[[watchers]]
+
+# If you want to use live related features, you should set a roomid.
+room_id = 8123199
+# Optionally, give him a nickname.
+nickname = "wl"
+
+# Use notification template.
+push = ["mirai", "acg.mn"]
+# Do not miss any livestream! Let's record it.
+capture = true
+
+
+# Add more watchers!
+#[[watchers]]
+#room_id = 654321
+#capture = false
+
+#...
+
+## END EXAMPLE
