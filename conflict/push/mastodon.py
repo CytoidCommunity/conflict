@@ -26,10 +26,12 @@ class Config(PushMethod):
 
 async def push(msg, config: Config):
     async with ClientSession() as session:
-        client = await MastodonAPI.create(**config.dict(include={'instance', 'client_id', 'use_https'}),
-                                          access_token=config.access_token.get_secret_value(),
-                                          client_secret=config.client_secret.get_secret_value(),
-                                          session=session)
+        client = await MastodonAPI.create(
+            **config.dict(include={'instance', 'client_id', 'use_https'}),
+            access_token=config.access_token.get_secret_value(),
+            client_secret=config.client_secret.get_secret_value() if config.client_secret else None,
+            session=session
+        )
         if isinstance(msg, str):
             msg = Status(media=None, status=msg)
         media = None

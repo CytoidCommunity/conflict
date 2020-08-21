@@ -97,7 +97,7 @@ class Config(BaseModel):
     transcoding: Optional[Transcoding]
     s3: Optional[S3]
 
-    push: Optional[Push]
+    push: Optional[Push] = []
     watchers: conlist(Watcher, min_items=1)
 
     @validator('watchers', each_item=True)

@@ -4,7 +4,7 @@ import asyncio
 import logging
 import time
 
-from tenacity import retry, wait_fixed, before_log, before_sleep_log
+from tenacity import retry, wait_fixed, before_log, before_sleep_log, stop_after_attempt
 from aiohttp import ClientSession
 import aiofiles
 
@@ -63,7 +63,7 @@ class Worker:
         return await _get_play_url()
 
     async def capture_stream(self, url, filename):
-        @self._retry()
+        @self._retry(stop=stop_after_attempt(5))
         @wraps(self.capture_stream)
         async def _capture_stream():
             async with ClientSession(
@@ -80,7 +80,7 @@ class Worker:
                     self.logger.info('🌟  点亮爱豆……')
                     self.logger.info('🕐  开始发光：%s', time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()))
                     self.logger.info('📁  %s', filename)
-                    async with aiofiles.open(filename, 'wb') as f:
+                    async with aiofiles.open(filename, 'ab') as f:
                         while True:
                             chuck = await resp.content.read(1024)
                             if not chuck:
@@ -118,7 +118,7 @@ class Worker:
                 if self.config.capture:
                     filename = '%s-%d-%s.flv' % (self.config.nickname
                                                  or anchor['base_info']['uname'], self.config.room_id,
-                                                 time.strftime('%Y-%m-%d_%H%M%S', time.localtime()))
+                                                 time.strftime('%Y-%m-%d-%H', time.localtime()))
                     filename = path.join(str(config.output), filename)
                     url_info = await self.get_play_url()
                     if url_info == {}:
